@@ -6,9 +6,6 @@ class HomeController < ApplicationController
     else
       redirect_to new_user_registration_path
     end
-    def destroy
-      sign_out
-      redirect_to new_user_registration_path
-    end
   end
+
 end
