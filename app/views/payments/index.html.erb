@@ -11,20 +11,15 @@
   </thead>
 
   <tbody>
-  <% @payments.where(user_id: current_user.id).each do |payment| %>
+  <% @payments.each do |payment| %>
     <tr>
       <td><%= payment.title %></td>
       <td><%= payment.amount %></td>
       <td><%= payment.email %></td>
-      <% if current_user.admin? || current_user == payment.user %>
-        <td><%= link_to 'Destroy', payment, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      <% else %>
-        <td colspan="3"></td>
-      <% end %>
     </tr>
   <% end %>
   </tbody>
 </table>
 
-  <%= button_to 'New Payment', new_payment_path, method: :get %>
-  <%= button_to 'Назад в профиль', '/', method: :get %>
+  <%= link_to 'New Payment', new_payment_path %>
+  <%= link_to 'Назад в профиль', '/' %>

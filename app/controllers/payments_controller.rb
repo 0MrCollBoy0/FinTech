@@ -3,7 +3,7 @@ class PaymentsController < ApplicationController
 
   # GET /payments or /payments.json
   def index
-    @payments = Payment.all
+    @payments = Payment.where("user_id = ? or email = ?", current_user.id, current_user.email)
   end
 
   # GET /payments/1 or /payments/1.json
@@ -23,6 +23,17 @@ class PaymentsController < ApplicationController
   # POST /payments or /payments.json
   def create
     @payment = Payment.new(payment_params)
+
+    user = User.find(current_user.id)
+    user.balance = user.balance - payment_params[:amount].to_f
+
+    if user.save
+      receiver = User.where(email: payment_params[:email]).first
+      receiver.balance = receiver.balance + payment_params[:amount].to_f
+      receiver.save
+    else
+      return
+    end
 
     respond_to do |format|
       if @payment.save
@@ -53,7 +64,7 @@ class PaymentsController < ApplicationController
     @payment.destroy!
 
     respond_to do |format|
-      format.html { redirect_to payments_url, notice: "Payment was successfully destroyed." }
+      format.html { redirect_to :admin, notice: "Payment was successfully destroyed." }
       format.json { head :no_content }
     end
   end

@@ -1,0 +1,9 @@
+<h1>Admin</h1>
+
+<% @payments.each do |payment| %>
+  <%= render payment %>
+  <p>
+    <%= link_to "Показать", payment %>
+    <%= button_to 'Удалить', payment, method: :delete %>
+  </p>
+<% end %>
